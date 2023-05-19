@@ -3,6 +3,7 @@ import { useState } from 'react';
 import shuffle from './utilities/shuffle';
 import Card from './components/Card';
 import Header from './components/Harder';
+import UseAppBadge from './hooks/UseAppBadge';
 
 function App() {
   const [wins, setWins] = useState(0);
@@ -10,11 +11,28 @@ function App() {
   const [pickOne, setPickOne] = useState(null);
   const [pickTwo, setPickTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [setbadge, clearBadge] = UseAppBadge();
 
   const handleClick = (card) => {
     if (!disabled) {
       pickOne ? setPickTwo(card) : setPickOne(card);
     }
+  };
+
+  // handle the player turn
+  const handleTurn = () => {
+    setPickOne(null);
+    setPickTwo(null);
+    setDisabled(false);
+  };
+
+  // Reset the game
+
+  const handleNewGame = () => {
+    clearBadge();
+    setWins(0);
+    handleTurn();
+    setCards(shuffle);
   };
 
   // Used for selecting and match handling
@@ -62,21 +80,9 @@ function App() {
       setWins(wins + 1);
       handleTurn();
       setCards(shuffle);
+      setbadge();
     }
   }, [cards, wins]);
-
-  const handleTurn = () => {
-    setPickOne(null);
-    setPickTwo(null);
-    setDisabled(false);
-  };
-  // Reset the game
-
-  const handleNewGame = () => {
-    setWins(0);
-    handleTurn();
-    setCards(shuffle);
-  };
 
   return (
     <>
